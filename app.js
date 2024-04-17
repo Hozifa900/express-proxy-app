@@ -1,65 +1,31 @@
-const express = require("express");
-const http = require("http");
 const https = require("https");
+const express = require("express");
 const { createProxyMiddleware } = require("http-proxy-middleware");
 
 const app = express();
 
-// Define proxy routes for /api/orders and /api/v1/orders
-app.use(
-  "/api/orders",
-  createProxyMiddleware({
-    target: "http://54.90.253.254:8888",
-    changeOrigin: true,
-    pathRewrite: {
-      "^/api/orders": "/api/orders",
-    },
-  })
-);
+// Define your proxy routes
+const proxyOptions = {
+  changeOrigin: true,
+};
 
-app.use(
-  "/api/v1/orders",
-  createProxyMiddleware({
-    target: "http://54.90.253.254:3003",
-    changeOrigin: true,
-    pathRewrite: {
-      "^/api/v1/orders": "/api/v1/orders",
-    },
-  })
-);
+// Proxy configurations
+const proxies = [
+  { path: "/api/orders", target: "http://54.90.253.254:8888" },
+  { path: "/api/v1/orders", target: "http://54.90.253.254:3003" },
+  { path: "/api/v1/statistics", target: "http://54.90.253.254:3003" },
+];
 
-// Define proxy route for /api/v1/statistics
-app.use(
-  "/api/v1/statistics",
-  createProxyMiddleware({
-    target: "http://54.90.253.254:3003",
-    changeOrigin: true,
-    pathRewrite: {
-      "^/api/v1/statistics": "/api/v1/statistics",
-    },
-  })
-);
-
-// Create an HTTP server
-const httpServer = https.createServer(app);
-
-// Start the HTTP server
-const httpPort = 443;
-httpServer.listen(httpPort, () => {
-  console.log(`HTTP Server is listening on port ${httpPort}`);
+// Create proxy middleware for each route
+proxies.forEach(({ path, target }) => {
+  app.use(path, createProxyMiddleware({ ...proxyOptions, target }));
 });
 
-// If you want HTTPS as well
-const privateKey = ""; // Add your private key file path
-const certificate = ""; // Add your certificate file path
+// Create HTTPS server using the default certificate on port 443
+const httpsServer = https.createServer(app);
 
-if (privateKey && certificate) {
-  const credentials = { key: privateKey, cert: certificate };
-  const httpsServer = https.createServer(credentials, app);
-
-  // Start the HTTPS server
-  const httpsPort = 443;
-  httpsServer.listen(httpsPort, () => {
-    console.log(`HTTPS Server is listening on port ${httpsPort}`);
-  });
-}
+// Listen on port 443 for HTTPS traffic
+const PORT = process.env.PORT || 443;
+httpsServer.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
