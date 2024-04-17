@@ -16,6 +16,10 @@ const proxies = [
   { path: "/api/v1/statistics", target: "http://54.90.253.254:3003" },
 ];
 
+app.post("/", (req, res) => {
+  res.send("done");
+});
+
 // Create proxy middleware for each route
 proxies.forEach(({ path, target }) => {
   app.use(path, createProxyMiddleware({ ...proxyOptions, target }));
