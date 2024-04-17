@@ -5,7 +5,7 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 const app = express();
 
 // Define your proxy routes
-const proxyOptions = {
+/*const proxyOptions = {
   changeOrigin: true,
 };
 
@@ -14,16 +14,16 @@ const proxies = [
   { path: "/api/orders", target: "http://54.90.253.254:8888" },
   { path: "/api/v1/orders", target: "http://54.90.253.254:3003" },
   { path: "/api/v1/statistics", target: "http://54.90.253.254:3003" },
-];
+];*/
 
 app.post("/", (req, res) => {
   res.send("done");
 });
 
 // Create proxy middleware for each route
-proxies.forEach(({ path, target }) => {
-  app.use(path, createProxyMiddleware({ ...proxyOptions, target }));
-});
+// proxies.forEach(({ path, target }) => {
+//   app.use(path, createProxyMiddleware({ ...proxyOptions, target }));
+// });
 
 // Create HTTPS server using the default certificate on port 443
 const httpsServer = https.createServer(app);
