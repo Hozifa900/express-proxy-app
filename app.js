@@ -1,4 +1,5 @@
 const https = require("https");
+const http = require("http");
 const express = require("express");
 const { createProxyMiddleware } = require("http-proxy-middleware");
 
@@ -26,7 +27,8 @@ app.post("/", (req, res) => {
 // });
 
 // Create HTTPS server using the default certificate on port 443
-const httpsServer = https.createServer(app);
+//const httpsServer = https.createServer(app);
+const httpsServer = http.createServer(app);
 
 // Listen on port 443 for HTTPS traffic
 const PORT = process.env.PORT || 443;
