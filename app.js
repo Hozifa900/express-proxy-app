@@ -41,7 +41,7 @@ app.use(
 );
 
 // Create an HTTP server
-const httpServer = http.createServer(app);
+const httpServer = https.createServer(app);
 
 // Start the HTTP server
 const httpPort = 443;
