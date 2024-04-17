@@ -21,6 +21,10 @@ app.post("/", (req, res) => {
   res.send("done");
 });
 
+app.get("/", (req, res) => {
+  res.send("get done");
+});
+
 // Create proxy middleware for each route
 // proxies.forEach(({ path, target }) => {
 //   app.use(path, createProxyMiddleware({ ...proxyOptions, target }));
