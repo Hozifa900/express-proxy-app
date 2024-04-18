@@ -12,7 +12,7 @@ app.get("/", (req, res) => {
   res.send("get done");
 });
 
-const httpsServer = https.createServer(app);
+const httpsServer = http.createServer(app);
 
 const PORT = 3000;
 httpsServer.listen(PORT, () => {
