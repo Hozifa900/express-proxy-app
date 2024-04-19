@@ -1,36 +1,26 @@
-const https = require("https");
-const http = require("http");
+const { default: axios } = require("axios");
 const express = require("express");
-const { createProxyMiddleware } = require("http-proxy-middleware");
+
+const morgan = require("morgan");
 
 const app = express();
-
-app.post("/", (req, res) => {
-  res.send("done");
-});
-app.get("/", (req, res) => {
-  res.send("get done");
-});
-
-// Define the proxy routes
-const proxyOptions = {
-  changeOrigin: true,
-};
-
-// Proxy configurations
-const proxies = [
-  { path: "/api/orders", target: "http://54.90.253.254:8888" },
-  { path: "/api/v1/orders", target: "http://54.90.253.254:3003" },
-  { path: "/api/v1/statistics", target: "http://54.90.253.254:3003" },
-];
-
-//Create proxy middleware for each route
-proxies.forEach(({ path, target }) => {
-  app.use(path, createProxyMiddleware({ ...proxyOptions, target }));
-});
-
-const httpsServer = http.createServer(app);
 const PORT = 3000;
-httpsServer.listen(PORT, () => {
+const API_ORDER_CREATE = "http://54.90.253.254:3003/api/v1/orders";
+
+app.use(morgan("dev"));
+app.use(express.json());
+
+app.post("/api/v1/orders", async (req, res) => {
+  try {
+    const response = await axios.post(API_ORDER_CREATE, req.body);
+    data = await response.data;
+    res.json(data);
+  } catch (e) {
+    console.log(e);
+    res.json(e);
+  }
+});
+
+app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
