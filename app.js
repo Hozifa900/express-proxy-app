@@ -10,6 +10,14 @@ const API_PAYMENT = "http://54.90.253.254:8888/api/orders";
 
 app.use(morgan("dev"));
 app.use(express.json());
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*"); // Allow requests from any origin
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
 
 app.post("/api/v1/orders", async (req, res) => {
   try {
