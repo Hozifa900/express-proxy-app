@@ -13,8 +13,10 @@ app.use(express.json());
 
 app.use((req, res, next) => {
   // Retrieve IP address from headers
-  const ipAddress =
-    req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+  const ipAddress = req.headers["x-forwarded-for"]
+    ? req.headers["x-forwarded-for"].split(",")[0].trim()
+    : req.connection.remoteAddress;
+
   // Set the user's IP address in a custom header
   req.headers["user-ip-address"] = ipAddress;
   res.header("Access-Control-Allow-Origin", "*"); // Allow requests from any origin
@@ -37,8 +39,10 @@ app.post("/api/v1/orders", async (req, res) => {
 
 app.post("/api/v1/statistics", async (req, res) => {
   try {
-    const ipAddress =
-      req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+    const ipAddress = req.headers["x-forwarded-for"]
+      ? req.headers["x-forwarded-for"].split(",")[0].trim()
+      : req.connection.remoteAddress;
+
     req.body.ipAddress = ipAddress;
 
     const response = await axios.post(`${API_ORDER}/statistics`, req.body);
