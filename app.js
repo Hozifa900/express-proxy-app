@@ -31,22 +31,21 @@ app.post("/api/v1/orders", async (req, res) => {
     data = await response.data;
     res.json(data);
   } catch (e) {
-    console.log(e);
     res.json(e);
   }
 });
 
 app.post("/api/v1/statistics", async (req, res) => {
   try {
-    req.body.ipAddress = "hozifa";
-    console.log("hi", req.body);
+    const ipAddress =
+      req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+    req.body.ipAddress = ipAddress;
 
     const response = await axios.post(`${API_ORDER}/statistics`, req.body);
     data = await response.data;
     console.log(req.body);
     res.json(data);
   } catch (e) {
-    console.log(e);
     res.json(e);
   }
 });
@@ -57,7 +56,6 @@ app.post("/api/orders", async (req, res) => {
     data = await response.data;
     res.json(data);
   } catch (e) {
-    console.log(e);
     res.json(e);
   }
 });
@@ -72,7 +70,6 @@ app.post("/api/orders/:orderID/capture", async (req, res) => {
     data = await response.data;
     res.json(data);
   } catch (e) {
-    console.log(e);
     res.json(e);
   }
 });
