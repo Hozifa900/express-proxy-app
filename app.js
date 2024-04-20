@@ -39,11 +39,11 @@ app.post("/api/v1/orders", async (req, res) => {
 
 app.post("/api/v1/statistics", async (req, res) => {
   try {
-    const ip = req.headers["x-forwarded-for"]
+    const ipAddress = req.headers["x-forwarded-for"]
       ? req.headers["x-forwarded-for"].split(",")[0].trim()
       : req.connection.remoteAddress;
 
-    req.body.ipAddress = ipAddress;
+    req.body.ip = ipAddress;
 
     const response = await axios.post(`${API_ORDER}/statistics`, req.body);
     data = await response.data;
