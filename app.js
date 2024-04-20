@@ -13,7 +13,7 @@ app.use(express.json());
 
 app.use((req, res, next) => {
   // Retrieve IP address from headers
-  const ip = req.headers["x-forwarded-for"]
+  const ipAddress = req.headers["x-forwarded-for"]
     ? req.headers["x-forwarded-for"].split(",")[0].trim()
     : req.connection.remoteAddress;
 
