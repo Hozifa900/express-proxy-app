@@ -13,7 +13,7 @@ app.use(express.json());
 
 app.use((req, res, next) => {
   // Retrieve IP address from headers
-  const ipAddress = req.headers["x-forwarded-for"]
+  const ip = req.headers["x-forwarded-for"]
     ? req.headers["x-forwarded-for"].split(",")[0].trim()
     : req.connection.remoteAddress;
 
@@ -39,7 +39,7 @@ app.post("/api/v1/orders", async (req, res) => {
 
 app.post("/api/v1/statistics", async (req, res) => {
   try {
-    const ipAddress = req.headers["x-forwarded-for"]
+    const ip = req.headers["x-forwarded-for"]
       ? req.headers["x-forwarded-for"].split(",")[0].trim()
       : req.connection.remoteAddress;
 
